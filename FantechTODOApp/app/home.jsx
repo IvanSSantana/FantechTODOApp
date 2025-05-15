@@ -1,8 +1,28 @@
-import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { Ionicons } from '@expo/vector-icons'
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Home() {
+  const [textInput, setTextInput] = useState('');
+  const [items, setItems] = useState([]);
+
+  const addItem = () => {
+    if (textInput == '') {
+      Alert.alert(
+        'Ocorreu um problema.',
+        'Por favor, informe o nome do produto.'
+      );
+    } else {
+      const newItem = {
+        id: Date.now().toString(),
+        name: textInput,
+        bought: false 
+      }
+      setItems([...items, newItem]);
+      setTextInput('');
+    }
+  }
+
   return (
     <View style={{ flex: 1}}>
       <ImageBackground
@@ -15,21 +35,35 @@ export default function Home() {
           <Ionicons name="trash" size={32} color = '#fff' />
         </View>
 
-        <View style={{ flex: 1}}></View>
+        <FlatList contentContainerStyle={{padding: 20, paddingBottom: 100, color: '#fff'}}
+        data={items} 
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) =>
+            <Text style={{color: '#fff', fontSize: 20}}>
+              {item.name}
+            </Text>
+        }
+        />
 
         <View style={styles.footer}>
           <View style = {styles.inputArea}>
             <TextInput
               style={styles.input}
               placeholder = 'Digite o nome do produto...'
-              placeholderTextColor = '#aeaiae' />
+              placeholderTextColor = '#aeaiae'
+              value={textInput}
+              onChangeText={(text) => setTextInput(text)} 
+              />
           </View>
 
-          <TouchableOpacity style={styles.iconArea}>
+          <TouchableOpacity style={styles.iconArea} onPress={addItem}>
             <Ionicons name='add' size={36} color='fff' />
           </TouchableOpacity>
         </View>
         
+        
+
+
       </ImageBackground>
     </View>
   )
