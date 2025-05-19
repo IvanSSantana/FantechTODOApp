@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, TouchableOpacity, Alert, FlatList } from 'react-native';
+import React, { useState } from 'react'
+import { Alert, FlatList, ImageBackground, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
+import ItemList from '../components/ItemList';
 
 export default function Home() {
   const [textInput, setTextInput] = useState('');
@@ -9,63 +10,59 @@ export default function Home() {
   const addItem = () => {
     if (textInput == '') {
       Alert.alert(
-        'Ocorreu um problema.',
-        'Por favor, informe o nome do produto.'
+        'Ocorreu um problema :(',
+        'Por favor, informe o nome do produto'
       );
     } else {
       const newItem = {
         id: Date.now().toString(),
         name: textInput,
-        bought: false 
+        bought: false
       }
       setItems([...items, newItem]);
       setTextInput('');
     }
-  }
+  } 
 
   return (
-    <View style={{ flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
-      source={require('../assets/background.jpg')}
-      style={{ flex: 1, justifyContent: 'flex-start'}}
-      resizeMode='repeat'>
-
+        source={require('../assets/background.jpg')}
+        style={{ flex: 1, justifyContent: 'flex-start' }}
+        resizeMode='repeat'
+      >
         <View style={styles.header}>
           <Text style={styles.title}>Lista de Produtos</Text>
-          <Ionicons name="trash" size={32} color = '#fff' />
+          <Ionicons name="trash" size={32} color="#fff" />
         </View>
 
-        <FlatList contentContainerStyle={{padding: 20, paddingBottom: 100, color: '#fff'}}
-        data={items} 
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) =>
-            <Text style={{color: '#fff', fontSize: 20}}>
-              {item.name}
-            </Text>
-        }
+        <FlatList
+          contentContainerStyle={{ padding: 20, paddingBottom: 100, color: '#fff' }}
+          data={items}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => 
+            <ItemList item={item}></ItemList>
+          }
         />
 
         <View style={styles.footer}>
-          <View style = {styles.inputArea}>
-            <TextInput
-              style={styles.input}
-              placeholder = 'Digite o nome do produto...'
-              placeholderTextColor = '#aeaiae'
+          <View style={styles.inputContainer}>
+            <TextInput 
+              color="#fff"
+              fontSize={18}
+              placeholderTextColor="#aeaeae"
+              placeholder='Digite o nome do produto...'
               value={textInput}
-              onChangeText={(text) => setTextInput(text)} 
-              />
+              onChangeText={(text) => setTextInput(text)}
+            />
           </View>
-
-          <TouchableOpacity style={styles.iconArea} onPress={addItem}>
-            <Ionicons name='add' size={36} color='fff' />
+          <TouchableOpacity style={styles.iconContainer} onPress={addItem}>
+            <Ionicons name="add" size={36} color="#fff" />
           </TouchableOpacity>
         </View>
-        
-        
-
 
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -77,17 +74,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#000000c0',
-    borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 30
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     color: '#fff'
-  },
-  input: {
-    color: '#fff',
-    fontSize: 18
   },
   footer: {
     backgroundColor: '#000000c0',
@@ -97,19 +90,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomLeftRadius: 30
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
-  inputArea: {
+  inputContainer: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
     height: 50,
     marginVertical: 20,
     borderRadius: 30,
     paddingHorizontal: 20,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
-  iconArea: {
+  iconContainer: {
     height: 50,
     width: 50,
     backgroundColor: '#000',
