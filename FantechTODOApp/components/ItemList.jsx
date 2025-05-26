@@ -2,15 +2,23 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
-export default function ItemList({ item }) {
+export default function ItemList({ item, markItem, unmarkItem, removeItem }) {
   return (
     <View style={styles.itemList}>
-      <Text style={styles.itemToBuy}>{item.name}</Text>
-      <TouchableOpacity style={[styles.actionIcon, {backgroundColor: 'darkgreen'}]}>
+      <Text style={item?.bought ? styles.itemBought : styles.itemToBuy}>{item.name}</Text>
+
+      {!item?.bought ?  (
+        <TouchableOpacity style={[styles.actionIcon, {backgroundColor: 'darkgreen'}]} onPress={() =>markItem(item.id)}>
         <Ionicons name='bag-check-outline' size={24} color='#fff' />
       </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={[styles.actionIcon, {backgroundColor: 'darkgreen'}]} onPress={() =>unmarkItem(item.id)}>
+        <Ionicons name='bag-remove-outline' size={24} color='#fff' />
+      </TouchableOpacity>
+      )}
 
-      <TouchableOpacity style={[styles.actionIcon, {backgroundColor: 'darkred'}]}>
+      
+      <TouchableOpacity style={[styles.actionIcon, {backgroundColor: 'darkred'}]} onPress={() => removeItem(item.id)}>
         <Ionicons name='trash-bin-outline' size={24} color='#fff' />
       </TouchableOpacity>
     </View>
@@ -31,9 +39,15 @@ const styles = StyleSheet.create({
   },
   itemToBuy: {
     flex: 1,
-    color: 'orange',
+    color: 'white',
     fontSize: 24,
     textDecorationLine: 'none'
+  },
+  itemBought: {
+    flex: 1,
+    color: 'white',
+    fontSize: 24,
+    textDecorationLine: 'line-through'
   },
   actionIcon: {
     marginHorizontal: 10,
