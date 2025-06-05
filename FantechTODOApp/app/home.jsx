@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home() {
   const [textInput, setTextInput] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItem] = useState([]);
   useEffect(() => {
     getItemsFromDevice()
   }, [])
@@ -19,7 +19,7 @@ export default function Home() {
     try {
       const itemsMemory = await AsyncStorage.getItem('FantechTODOApp');
       if (itemsMemory != null)
-        setItems(JSON.parse(itemsMemory))
+        setItem(JSON.parse(itemsMemory))
     } catch (error) {
       console.log(`Erro: ${error}`)
     }
@@ -28,7 +28,7 @@ export default function Home() {
   const saveItemsToDevice = async () => {
     try {
       const itemsJson = JSON.stringify(items);
-      await AsyncStorage.setItems('FantechTODOApp', itemsJson);
+      await AsyncStorage.setItem('FantechTODOApp', itemsJson);
     } catch (error) {
       console.log(`Erro: ${error}`)
     }
@@ -46,7 +46,7 @@ export default function Home() {
         name: textInput,
         bought: false
       }
-      setItems([...items, newItem]);
+      setItem([...items, newItem]);
       setTextInput('');
     }
   } 
@@ -58,7 +58,7 @@ export default function Home() {
       }
       return item;
     });
-    setItems(newItems);
+    setItem(newItems);
   }
 
   const unmarkItemBought = itemId => {
@@ -68,7 +68,7 @@ export default function Home() {
       }
       return item;
     });
-    setItems(newItems);
+    setItem(newItems);
   }
 
   const removeItem = itemId => {
@@ -77,7 +77,7 @@ export default function Home() {
       [
         {text: 'sim', onPress: () => {
           const newItems = items.filter(item => item.id != itemId);
-          setItems(newItems);
+          setItem(newItems);
         }
       },
       {
@@ -93,7 +93,7 @@ export default function Home() {
       [
         {
           text: 'Sim',
-          onPress: () => { setItems([])}
+          onPress: () => { setItem([])}
         },
         {
           text: 'Cancelar', style: 'cancel'
